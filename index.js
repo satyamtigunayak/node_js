@@ -121,22 +121,56 @@ const port=8000;
     
 // }) 
 
-// login form submission
+// login form submission 🙌
  
-app.get('/',(req,res)=>{
-    res.send(home())
-})
+// app.get('/',(req,res)=>{
+//     res.send(home())
+// })
 // method post use kiya then hume post use karna padega submit me 
 // if hum method use ni karte to get se bhi kaam ho jata
-app.get('/login',(req,res)=>{
-    res.send(login())
-})
+// app.get('/login',(req,res)=>{
+//     res.send(login())
+// })
 
-app.post('/submit',(req,res)=>{
-    res.send(submit())
-})
+// app.post('/submit',(req,res)=>{
+//     res.send(submit())
+// })
 
-app.listen(port,()=>{
-    console.log('server running on port');
+// app.listen(port,()=>{
+//     console.log('server running on port');
     
+// })
+
+// external middleware 🐱‍👤🤳 
+
+ import cors from 'cors';
+ import morgan from "morgan";
+ import rateLimit from 'express-rate-limit'
+
+ app.use(morgan('dev')) // kaun enter kar raha h
+ app.use(cors()) // kaun enter kar sakta h
+
+ const limiter=rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+	limit: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	message:'Many request from ip address try 15 min later',
+    standardHeaders: true, // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	ipv6Subnet: 56, // Set to 60 or 64 to be less aggressive, or 52 or 48 to be more aggressive
+	// store: ... , // Redis, Memcached, etc. See below.
+})
+
+app.use('/',limiter)
+
+ app.get('/',(req,res)=>{
+    res.send('Hello third party middleware')
+ });
+
+ app.get('/api/data',(req,res)=>{
+    res.json({msg:'sample api responce'})
+ });
+
+ app.listen(port,()=>{
+    console.log(`server running port ${port}`);
+   
 })
