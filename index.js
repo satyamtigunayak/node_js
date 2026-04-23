@@ -176,14 +176,62 @@ const port=8000;
 
 // ejs practice  views 🦹‍♀️🦹‍♀️
 
+// app.set('view engine', 'ejs');
 
+// app.get('/', (req, res) => {
+//   res.render('index',{title:'satyam', content:'rendering from node'});
+// });
+
+// app.listen(port, () => {
+//   console.log(`server running on ${port}`);
+// });
+
+// mvc architecture 
+
+// Dynamic routes and  ejs conditions - views/user.ejs ❤🎉🎉
+
+// app.set('view engine', 'ejs');
+
+// // dummy data
+// const users=[{name:'SATYAM',id:1,role:'admin'},
+//   {name:'yuvraj',id:2,role:'editor'},
+//   {name:'sures',id:3,role:'viewer'}
+// ]
+
+// // Dynamic routes 
+// app.get('/users/:id',(req,res)=>{
+//   const {id} =req.params
+//   const user=users.find(u=>u.id===parseInt(id))
+//   if(user){
+//     res.render('user',{user})
+//   } else{
+//     res.status(404).send('user not found')
+//   }
+// })
+
+// app.listen(port,()=>{
+//   console.log(`server running on ${port}`);
+// })
+
+// API integration  views /posts.ejs 🤷‍♂️
+
+import fetch from 'node-fetch'
 
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-  res.render('index',{title:'satyam', content:'rendering from node'});
-});
+app.get('/posts', async (req,res)=>{
+   try{ 
+       const response=await fetch('https://jsonplaceholder.typicode.com/posts')
+      const posts= await response.json()
+       console.log(posts);
+       res.render('posts',{posts})
+   }
+   catch(error)
+   { 
+      res.status(500).send('error fetching post')
+   }
+})
+app.listen(port,()=>{
+  console.log('api coming for server ',port);
 
-app.listen(port, () => {
-  console.log(`server running on ${port}`);
-});
+})
